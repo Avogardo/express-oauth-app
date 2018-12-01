@@ -12,12 +12,20 @@ passport.use(
   }, (accessToken, refreshToken, profile, done) => {
     // passport callback function
     console.log('User profile', profile);
-    new User({
-      googleId: profile.id,
-      userName: profile.displayName,
-      imageUrl: profile.photos[0].value,
-    }).save().then((newUser) => {
-      console.log('new user created', newUser);
+    User.findOne({ googleId: profile.id }).then((currentUser) => {
+      if (currentUser) {
+        // already have this user
+        console.log('user is', currentUser);
+      } else {
+        // if not, create user in our db
+        new User({
+          googleId: profile.id,
+          userName: profile.displayName,
+          imageUrl: profile.photos[0].value,
+        }).save().then((newUser) => {
+          console.log('new user created', newUser);
+        });
+      }
     });
   }),
 );
