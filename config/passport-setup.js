@@ -7,6 +7,7 @@ passport.use(
     // options for google strategy
     clientID: keys.google.clientID,
     clientSecret: keys.google.clientSecret,
+    callbackURL: '/auth/google/redirect',
   }, () => {
     // passport callback function
   }),
